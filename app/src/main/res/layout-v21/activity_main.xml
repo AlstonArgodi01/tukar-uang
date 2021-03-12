@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="122dp"
+        android:layout_height="130dp"
+        android:background="#AAA7A7"
+        android:backgroundTint="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.221">
+
+        <TextView
+            android:id="@+id/tvresult"
+            android:layout_width="138dp"
+            android:layout_height="34dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="#ECE8E8"
+            android:textColor="#171616"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.022"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.783" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilfrom"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="184dp"
+            android:layout_height="51dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.027"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.341">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etfrom"
+                android:layout_width="255dp"
+                android:layout_height="248dp"
+                android:background="#FBFBFB"
+                android:inputType="numberDecimal"
+                android:textColor="#000000" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnkonvert"
+            android:layout_width="106dp"
+            android:layout_height="36dp"
+            android:backgroundTint="#FF5722"
+            android:text="konversi"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.971"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sptocur"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tvfrom"
+            android:layout_width="42dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/dari"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@+id/btnkonvert"
+            app:layout_constraintEnd_toStartOf="@+id/tvto"
+            app:layout_constraintHorizontal_bias="0.843"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Spinner
+            android:id="@+id/spfromcur"
+            android:layout_width="53dp"
+            android:layout_height="24dp"
+            android:background="#FFEB3B"
+            android:backgroundTint="#FFFFFF"
+            android:entries="@array/matauang"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.698"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvfrom"
+            app:layout_constraintVertical_bias="0.106" />
+
+        <Spinner
+            android:id="@+id/sptocur"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:background="#C8C3C3"
+            android:backgroundTint="#FFFFFF"
+            android:entries="@array/matauang"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.956"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvto"
+            app:layout_constraintVertical_bias="0.118" />
+
+        <TextView
+            android:id="@+id/tvto"
+            android:layout_width="42dp"
+            android:layout_height="18dp"
+            android:gravity="center"
+            android:text="@string/ke"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.947"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.119" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.267" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
