@@ -5,9 +5,7 @@ Actually this is my first-time app using retrofit and web service, In this app t
 1. Currecncy Converter
 
 # :hammer: Implementation
-let me tell what i'm using to build this project
 1.  Dagger Hilt
-2.  MVVM
 3.  Retrofit
 4.  Spinner
 5.  Currency Api
