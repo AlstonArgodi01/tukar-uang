@@ -1,19 +1,19 @@
-package com.example.tukaruang2
+package com.example.tukaruang2.presentasion
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import com.example.tukaruang2.R
 import com.example.tukaruang2.databinding.ActivityMainBinding
-import com.example.tukaruang2.repo.Mainviewmodel
+import com.example.tukaruang2.util.RemoteResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private  val viewmodel: Mainviewmodel by viewModels()
+    private  val viewmodel: MainActivityViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,13 +33,13 @@ class MainActivity : AppCompatActivity() {
             )
         }
         lifecycleScope.launchWhenStarted {
-            viewmodel.konversion.collect { event ->
+            viewmodel.conversion.collect { event ->
                 when(event){
-                    is Mainviewmodel.currevent.berhasil ->{
+                    is RemoteResponse.Succes ->{
                         binding.tvResult.setTextColor(Color.BLACK)
                         binding.tvResult.text = event.sukses
                     }
-                    is Mainviewmodel.currevent.gagal ->{
+                    is RemoteResponse.Failed ->{
                         binding.tvResult.setTextColor(Color.RED)
                         binding.tvResult.text = event.fail
                     }

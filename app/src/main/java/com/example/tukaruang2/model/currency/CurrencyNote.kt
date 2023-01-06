@@ -1,8 +1,8 @@
-package com.example.tukaruang2.model
+package com.example.tukaruang2.model.currency
 
 import com.google.gson.annotations.SerializedName
 
-data class APIdata(
+data class CurrencyNote(
     @SerializedName("USDAED")
     val uSDAED: Double,
     @SerializedName("USDAFN")

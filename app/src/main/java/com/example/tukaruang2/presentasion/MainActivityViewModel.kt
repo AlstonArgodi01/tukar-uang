@@ -1,59 +1,55 @@
-package com.example.tukaruang2.repo
+package com.example.tukaruang2.presentasion
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tukaruang2.model.APIdata
-import com.example.tukaruang2.util.dispatcherprov
-import com.example.tukaruang2.util.resources
+import com.example.tukaruang2.model.currency.CurrencyNote
+import com.example.tukaruang2.model.repository.ICurrencyRepository
+import com.example.tukaruang2.util.RemoteResponse
+import com.example.tukaruang2.util.DispatcherProvider
+import com.example.tukaruang2.util.ResourcesResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.math.round
 
 //viewmodel data
-class Mainviewmodel @ViewModelInject constructor( //dager hilt
-    private val repository : Mainrepo,
-    private val dispatcher : dispatcherprov
+class MainActivityViewModel @ViewModelInject constructor( //dager hilt
+    private val repository : ICurrencyRepository,
+    private val dispatcher : DispatcherProvider
     ): ViewModel() {
-        //class event
-        sealed class currevent {
-            class berhasil(val sukses: String): currevent() //berhasil
-            class gagal(val fail: String): currevent() //gagal
-            object loading: currevent() //loading
-            object empty : currevent() //kosong
-        }
-    private val _konversi = MutableStateFlow<currevent>(currevent.empty)
-    val konversion: StateFlow<currevent> = _konversi
 
-    //konversi
+    private val _konversi = MutableStateFlow<RemoteResponse>(RemoteResponse.Empty)
+    val conversion: StateFlow<RemoteResponse> = _konversi
+
+
     fun convert(jumlahStr : String,dari : String,ke : String){
-        val darijumlah = jumlahStr.toFloatOrNull()
-        if(darijumlah == null){ //cek input kosong atau tidak
-            _konversi.value = currevent.gagal("error kosong")
+        val amountFrom = jumlahStr.toFloatOrNull()
+        if(amountFrom == null){
+            _konversi.value = RemoteResponse.Failed("Error kosong")
             return
         }
         //kotlin corutines
         viewModelScope.launch(dispatcher.io) {
-            _konversi.value = currevent.loading
+            _konversi.value = RemoteResponse.Loading
             when(val konrespon = repository.getrates(dari)){ //konrespon = konversi respon
-                is resources.error -> _konversi.value = currevent.gagal(konrespon.messeage!!)
-                is resources.success ->{ //jika berhasil
-                    val rates = konrespon.data!!.APIdata //pass api data
-                    val rate = ambilcurr(ke,rates)
+                is ResourcesResponse.Error -> _konversi.value = RemoteResponse.Failed(konrespon.messeage!!)
+                is ResourcesResponse.Success ->{ //jika Succes
+                    val rates = konrespon.data!!.CurrencyNote //pass api data
+                    val rate = currencyRates(ke,rates)
                     if(rate == null){
-                        _konversi.value = currevent.gagal("gagal")
+                        _konversi.value = RemoteResponse.Failed("Failed")
                     }else{
-                        val convertedcurr = round(darijumlah * rate * 100)/100
+                        val convertedcurr = round(amountFrom * rate * 100)/100
 
-                        _konversi.value = currevent.berhasil("$darijumlah $ke = $convertedcurr")
+                        _konversi.value = RemoteResponse.Succes("$amountFrom $ke = $convertedcurr")
                     }
                 }
             }
         }
     }
     //ambil rates
-    private fun ambilcurr(currency: String, rate : APIdata) = when (currency){
+    private fun currencyRates(currency: String, rate : CurrencyNote) = when (currency){
         "AED" -> rate.uSDAED
         "AFN" -> rate.uSDAFN
         "ALL" -> rate.uSDALL

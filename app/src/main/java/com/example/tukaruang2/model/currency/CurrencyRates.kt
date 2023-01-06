@@ -1,16 +1,16 @@
-package com.example.tukaruang2.model
+package com.example.tukaruang2.model.currency
 
 
 import com.google.gson.annotations.SerializedName
 
-data class RatesX(
+data class CurrencyRates(
     @SerializedName("privacy")
     val privacy: String,
     @SerializedName("quotes")
-    val APIdata: APIdata,
+    val CurrencyNote: CurrencyNote,
     @SerializedName("source")
     val source: String,
-    @SerializedName("success")
+    @SerializedName("Success")
     val success: Boolean,
     @SerializedName("terms")
     val terms: String,
