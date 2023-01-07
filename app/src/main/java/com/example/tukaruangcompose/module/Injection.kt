@@ -1,7 +1,11 @@
 package com.example.tukaruang2.module
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import android.content.Context
+import com.example.tukaruang2.model.repository.CurrencyRepository
+import com.example.tukaruangcompose.module.ApiConfig
 
-@HiltAndroidApp
-class Injection : Application()
+object Injection {
+    fun provideCurrencyRepository(context : Context): CurrencyRepository{
+        return  CurrencyRepository(ApiConfig.setCurrencyService())
+    }
+}

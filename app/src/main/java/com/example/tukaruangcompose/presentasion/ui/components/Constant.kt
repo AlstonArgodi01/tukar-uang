@@ -1,0 +1,38 @@
+package com.example.tukaruangcompose.presentasion.ui.components
+
+object Constant {
+    val currecnyList = listOf(
+        "CAD",
+        "HKD",
+        "ISK",
+        "EUR",
+        "PHP",
+        "DKK",
+        "HUF",
+        "CZK",
+        "AUD",
+        "RON",
+        "SEK",
+        "IDR",
+        "INR",
+        "BRL",
+        "RUB",
+        "HRK",
+        "JPY",
+        "THB",
+        "CHF",
+        "SGD",
+        "PLN",
+        "BGN",
+        "CNY",
+        "NOK",
+        "NZD",
+        "ZAR",
+        "USD",
+        "MXN",
+        "ILS",
+        "GBP",
+        "KRW",
+        "MYR",
+    )
+}
