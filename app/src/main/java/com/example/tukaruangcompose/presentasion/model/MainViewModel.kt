@@ -16,12 +16,13 @@ class MainViewModel(val currencyRepository: CurrencyRepository): ViewModel() {
             val getCurrency = currencyRepository.getrates(from)
             when(getCurrency){
                 is ResourcesResponse.Success ->{
-                    val rates = getCurrency.data!!.CurrencyNote
+                    val rates = getCurrency.data!!
                     val rateResult = RateCurrency.getRateForCurrency(
                         to,
-                        rates
+                        getCurrency.data.rates
                     )
                 }
+                else -> {}
             }
         }
     }
