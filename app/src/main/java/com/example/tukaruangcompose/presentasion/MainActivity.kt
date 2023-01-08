@@ -1,6 +1,7 @@
 package com.example.tukaruangcompose.presentasion
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +37,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+fun calculateValue(valueA : Int,valueB : Int):Int{
+    return valueA + valueB
+}
+
 @Composable
 fun Title(name: String) {
     Text(
@@ -64,16 +69,26 @@ fun currencyInput(
 }
 @Composable
 fun currencyInput(
-    title: String
+    title: String,
+    getValue : (Int)-> Unit
 ){
     var expand by remember{ mutableStateOf(false)}
-    var value by remember { mutableStateOf("") }
+    var numberValue by remember { mutableStateOf("") }
+    var selectedCurrency by remember {
+        mutableStateOf("choose currency")
+    }
+
+    if(numberValue != ""){
+        getValue(numberValue.toInt())
+    }
+
+
     Column(
         modifier = Modifier
             .padding(10.dp)
     ){
         Text(
-            text = "choose currency",
+            text = selectedCurrency,
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = { expand = true })
@@ -88,6 +103,7 @@ fun currencyInput(
                     DropdownMenuItem(
                         onClick = {
                             expand = false
+                            selectedCurrency = value
                         },
                     ) {
                         Text(text = value)
@@ -98,24 +114,53 @@ fun currencyInput(
         Spacer(modifier = Modifier.height(20.dp))
         currencyInput(
             label = title,
-            value = value,
-            onChange = { value = it }
+            value = numberValue,
+            onChange = { numberValue = it }
         )
 
     }
 }
 
+@Composable
+fun submitValue(
+    valueB: Int,
+    valueA: Int,
+    result: (Int)->Unit
+){
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Button(
+            onClick = { result(calculateValue(valueA, valueB)) },
+            modifier = Modifier.padding(10.dp)
+        ) {
+            Text(text = "caculate")
+        }
+    }
+}
 
 
 @Composable
 fun exchangeLayout(){
+    var valueA by remember { mutableStateOf(0) }
+    var valueB by remember { mutableStateOf(0) }
+    var result by remember { mutableStateOf(0) }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Title(name = "Currency Exchange")
-        currencyInput("From")
-        Spacer(modifier = Modifier.height(16.dp))
-        currencyInput("To")
+        currencyInput("Value From", getValue = { valueA = it})
+        currencyInput("Value To", getValue = { valueB = it})
+        submitValue(valueB, valueA, result = { result = it})
+        Text(
+            modifier = Modifier.padding(5.dp),
+            text = result.toString(),
+            fontSize = 16.sp,
+            fontStyle = Typography().h1.fontStyle,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 
