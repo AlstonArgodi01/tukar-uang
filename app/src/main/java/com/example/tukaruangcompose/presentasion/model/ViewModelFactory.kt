@@ -1,4 +1,4 @@
-package com.example.tukaruangcompose.presentasion
+package com.example.tukaruangcompose.presentasion.model
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
