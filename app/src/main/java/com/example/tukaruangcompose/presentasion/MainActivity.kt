@@ -2,22 +2,24 @@ package com.example.tukaruangcompose.presentasion
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tukaruangcompose.presentasion.model.MainViewModel
+import com.example.tukaruangcompose.presentasion.model.ViewModelFactory
 import com.example.tukaruangcompose.presentasion.ui.components.Constant
+import com.example.tukaruangcompose.presentasion.ui.helpers.CalcualteValue
 import com.example.tukaruangcompose.presentasion.ui.theme.TukaruangComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,21 +27,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TukaruangComposeTheme {
+                val viewModel : MainViewModel by viewModels{
+                    ViewModelFactory.getInstance(this)
+                }
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    exchangeLayout()
+                    ExchangeLayout(
+                        viewModel
+                    )
                 }
             }
         }
     }
+
+    fun calculateCurrency(
+        from : String,
+        valueA : Int,
+        to : String,
+        valueB : Int
+    ){
+//        viewModel.conversion(
+//            from = from,
+//            amountFrom = valueA,
+//            to = to,
+//            amountTo = valueB
+//        )
+    }
 }
 
-fun calculateValue(valueA : Int,valueB : Int):Int{
-    return valueA + valueB
-}
 
 @Composable
 fun Title(name: String) {
@@ -51,8 +70,9 @@ fun Title(name: String) {
         fontWeight = FontWeight.Bold,
     )
 }
+
 @Composable
-fun currencyInput(
+fun CurrencyInputTextField(
     label : String,
     value : String,
     onChange : (String) -> Unit
@@ -60,7 +80,6 @@ fun currencyInput(
     TextField(
         value = value,
         onValueChange = onChange,
-        label = { Text(text = label)},
         modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
@@ -68,12 +87,18 @@ fun currencyInput(
     )
 }
 @Composable
-fun currencyInput(
+fun InputLayout(
     title: String,
-    getValue : (Int)-> Unit
+    getValue : (Int)-> Unit,
+    getCurrency : (String) -> Unit,
+    type : String,
 ){
-    var expand by remember{ mutableStateOf(false)}
-    var numberValue by remember { mutableStateOf("") }
+    var expand by remember{
+        mutableStateOf(false)
+    }
+    var numberValue by remember {
+        mutableStateOf("")
+    }
     var selectedCurrency by remember {
         mutableStateOf("choose currency")
     }
@@ -81,7 +106,9 @@ fun currencyInput(
     if(numberValue != ""){
         getValue(numberValue.toInt())
     }
-
+    if (selectedCurrency.isNotEmpty()){
+        getCurrency(selectedCurrency)
+    }
 
     Column(
         modifier = Modifier
@@ -106,13 +133,15 @@ fun currencyInput(
                             selectedCurrency = value
                         },
                     ) {
-                        Text(text = value)
+                        Text(
+                            text = "$type $value"
+                        )
                     }
                 }
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
-        currencyInput(
+        CurrencyInputTextField(
             label = title,
             value = numberValue,
             onChange = { numberValue = it }
@@ -122,38 +151,69 @@ fun currencyInput(
 }
 
 @Composable
-fun submitValue(
+fun SubmitValue(
+    from : String,
+    to : String,
     valueB: Int,
     valueA: Int,
-    result: (Int)->Unit
+    result: (Int)->Unit,
+    viewModel: MainViewModel,
 ){
-
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Button(
-            onClick = { result(calculateValue(valueA, valueB)) },
+            onClick = {
+                viewModel.conversion(
+                    from = from,
+                    amountFrom = valueA,
+                    to = to,
+                    amountTo = valueB
+                )
+            },
             modifier = Modifier.padding(10.dp)
         ) {
             Text(text = "caculate")
         }
     }
+
 }
 
-
 @Composable
-fun exchangeLayout(){
+fun ExchangeLayout(
+    viewModel: MainViewModel
+){
     var valueA by remember { mutableStateOf(0) }
     var valueB by remember { mutableStateOf(0) }
+    var currencyA by remember { mutableStateOf("") }
+    var currencyB by remember { mutableStateOf("") }
+
     var result by remember { mutableStateOf(0) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Title(name = "Currency Exchange")
-        currencyInput("Value From", getValue = { valueA = it})
-        currencyInput("Value To", getValue = { valueB = it})
-        submitValue(valueB, valueA, result = { result = it})
+        InputLayout(
+            "Value From",
+            getValue = { valueA = it},
+            getCurrency = { currencyA = it},
+            type = "from"
+        )
+        InputLayout(
+            "Value To",
+            getValue = { valueB = it},
+            getCurrency = { currencyB = it},
+            type = "to"
+        )
+        SubmitValue(
+            from = currencyA,
+            to = currencyB,
+            valueB = valueB,
+            valueA = valueA,
+            result = { result = it},
+            viewModel = viewModel
+        )
         Text(
             modifier = Modifier.padding(5.dp),
             text = result.toString(),
@@ -171,6 +231,6 @@ fun exchangeLayout(){
 @Composable
 fun DefaultPreview() {
     TukaruangComposeTheme() {
-        exchangeLayout()
+//        ExchangeLayout()
     }
 }
