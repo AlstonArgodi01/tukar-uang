@@ -1,9 +1,10 @@
 package com.example.tukaruang2.model.repository
 
-import com.example.tukaruang2.model.currency.CurrencyAttribute
+import androidx.lifecycle.LiveData
 import com.example.tukaruang2.util.ResourcesResponse
-import com.example.tukaruangcompose.model.currency.CurrencyReponse
+import com.example.tukaruangcompose.model.currency.response.CurrResponse
+import com.example.tukaruangcompose.model.utils.ResultRespon
 
 interface ICurrencyRepository {
-    suspend fun getrates(base : String): ResourcesResponse<CurrencyReponse>
+    suspend fun getRates(base : String): LiveData<ResultRespon<CurrResponse>>
 }

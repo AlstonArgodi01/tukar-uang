@@ -1,5 +1,6 @@
 package com.example.tukaruangcompose.presentasion
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -43,22 +44,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    fun calculateCurrency(
-        from : String,
-        valueA : Int,
-        to : String,
-        valueB : Int
-    ){
-//        viewModel.conversion(
-//            from = from,
-//            amountFrom = valueA,
-//            to = to,
-//            amountTo = valueB
-//        )
-    }
 }
 
+suspend fun calculateCurrency(
+    from : String,
+    valueA : Int,
+    to : String,
+    valueB : Int,
+    context : Context,
+    viewModel: MainViewModel
+){
+
+    viewModel.conversion(
+        from = from,
+        amountFrom = valueA,
+        to = to,
+        amountTo = valueB
+    )
+}
 
 @Composable
 fun Title(name: String) {
@@ -164,7 +167,8 @@ fun SubmitValue(
     ) {
         Button(
             onClick = {
-                viewModel.conversion(
+
+                calculateCurrency(
                     from = from,
                     amountFrom = valueA,
                     to = to,

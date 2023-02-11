@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    private val baseUrl = "http://api.currencylayer.com/"
+    private const val baseUrl = "http://api.currencylayer.com/"
 
     fun setCurrencyService(): CurrencyService{
         val client = OkHttpClient.Builder()
