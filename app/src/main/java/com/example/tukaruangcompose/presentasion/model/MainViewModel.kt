@@ -8,6 +8,8 @@ import com.example.tukaruang2.model.repository.CurrencyRepository
 import com.example.tukaruang2.util.ResourcesResponse
 import com.example.tukaruangcompose.model.currency.response.CurrResponse
 import com.example.tukaruangcompose.model.utils.ResultRespon
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -15,5 +17,8 @@ class MainViewModel(
 ): ViewModel() {
 
     suspend fun conversion(amountFrom : Int, from : String, to : String, amountTo : Int)
-    : LiveData<ResultRespon<CurrResponse>> = currencyRepository.getRates(base = from)
+    : LiveData<ResultRespon<CurrResponse>> {
+        val result = currencyRepository.getRates(base = from)
+        return result
+    }
 }

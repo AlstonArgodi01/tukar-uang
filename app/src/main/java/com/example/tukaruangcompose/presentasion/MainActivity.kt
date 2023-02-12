@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +23,8 @@ import com.example.tukaruangcompose.presentasion.model.ViewModelFactory
 import com.example.tukaruangcompose.presentasion.ui.components.Constant
 import com.example.tukaruangcompose.presentasion.ui.helpers.CalcualteValue
 import com.example.tukaruangcompose.presentasion.ui.theme.TukaruangComposeTheme
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +57,6 @@ suspend fun calculateCurrency(
     context : Context,
     viewModel: MainViewModel
 ){
-
     viewModel.conversion(
         from = from,
         amountFrom = valueA,
@@ -162,18 +164,23 @@ fun SubmitValue(
     result: (Int)->Unit,
     viewModel: MainViewModel,
 ){
+    val coroutine = rememberCoroutineScope()
+    val lifeyclerOwner = rememberUpdatedState(newValue = LocalLifecycleOwner.current)
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Button(
             onClick = {
-
-                calculateCurrency(
-                    from = from,
-                    amountFrom = valueA,
-                    to = to,
-                    amountTo = valueB
-                )
+                coroutine.launch {
+                    viewModel.conversion(
+                        from = from,
+                        amountFrom = valueA,
+                        to = to,
+                        amountTo = valueB
+                    ).observe(lifeyclerOwner.value){
+                        Log.d("result",it.toString())
+                    }
+                }
             },
             modifier = Modifier.padding(10.dp)
         ) {

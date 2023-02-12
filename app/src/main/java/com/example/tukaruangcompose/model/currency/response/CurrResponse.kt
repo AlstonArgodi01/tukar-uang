@@ -6,7 +6,7 @@ data class CurrResponse(
  @SerializedName("privacy")
  val privacy: String,
  @SerializedName("quotes")
- val quotes: Quotes,
+ val quotes: List<Quotes>,
  @SerializedName("source")
  val source: String,
  @SerializedName("success")
